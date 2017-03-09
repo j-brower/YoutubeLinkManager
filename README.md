@@ -15,9 +15,9 @@ Playlists are saved by serializing the data structures in the same directory as 
 Output files are generated in the jar's directory.
 
 ##Features
-Markup: *json, csv, and xml output
-        *automatic title and length fetching
-        *search across all playlists
+* json, csv, and xml output
+* automatic title and length fetching
+* search across all playlists
 
 ##Planned
-Markup: *GUI improvements
+* GUI improvements
