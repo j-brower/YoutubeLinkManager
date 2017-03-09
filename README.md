@@ -8,16 +8,16 @@ Get JDK 1.8 and maven working.
 Move the uber jar to a folder of your choice, rename it if you wish.
 If you're keeping the source around, you can run ```mvn clean``` now.
 Go get a Google APIs key if you want titles and lengths automatically fetched for you.
-Your key will be saved, and can be updated or removed at any time.
+Your key will be saved in the serialized data structure, and can be updated or removed at any time.
 
 ##Usage
 Playlists are saved by serializing the data structures in the same directory as the uber jar.
 Output files are generated in the jar's directory.
 
 ##Features
-*json, csv, and xml output
-*automatic title and length fetching
-*search across all playlists
+* json, csv, and xml output
+* automatic title and length fetching
+* search across all playlists
 
 ##Planned
-*GUI improvements
+* GUI improvements
