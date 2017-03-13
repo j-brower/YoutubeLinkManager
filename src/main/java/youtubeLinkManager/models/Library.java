@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class Library implements Serializable {
 
-    private TreeMap<String, LinkList> lists = new TreeMap<String, LinkList>();
+    private TreeMap<String, LinkList> lists = new TreeMap<String, LinkList>(String.CASE_INSENSITIVE_ORDER);
     private String apiKey = "";
 
     public boolean hasAPIKey() { return !apiKey.equals(""); }

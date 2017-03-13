@@ -3,7 +3,7 @@ package youtubeLinkManager.models;
 import java.util.*;
 import java.io.Serializable;
 
-public class LinkList implements Serializable {
+public class LinkList implements Serializable, Comparable<LinkList> {
 
     private String name;
     private ArrayList<Link> links = new ArrayList<Link>();
@@ -31,5 +31,7 @@ public class LinkList implements Serializable {
     public String getName() { return name; }
     public Link getLink(int index) { return links.get(index); }
     public ArrayList<Link> getLinks() { return links; }
+
+    public int compareTo(LinkList l) { return name.compareToIgnoreCase(l.getName()); }
 
 }
