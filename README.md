@@ -2,6 +2,11 @@ A simple swing application that provides a local implementation of playlist orga
 
 Allows you to use an inferior GUI as a trade-off for organizing playlists on your machine with export options.
 
+
+
+##Motivation
+I couldn't figure out what a song that got deleted in a playlist was.
+
 ##Installation
 Get JDK 1.8 and maven working.
 ```mvn package``` should generate a jar and uber jar, ```target/YoutubeLinkManager-1-jar-with-depenencies.jar```.
