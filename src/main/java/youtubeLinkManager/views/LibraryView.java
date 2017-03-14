@@ -219,8 +219,12 @@ public class LibraryView implements Runnable {
             int linkIndex = linkList.getSelectedIndex();
             if(linkIndex == -1)
                 return;
-            libc.removeLink(listName, linkIndex);
-            refreshLinkList(listName);
+            String msg = "Delete link \""+libc.getLink(listName, linkIndex).getTitle()+"\" from list \""+listName+"\"?";
+            if(JOptionPane.showConfirmDialog(listViewDialog, msg,"Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                libc.removeLink(listName, linkIndex);
+                refreshLinkList(listName);
+            }
         });
         JButton saveButton = new JButton(SAVETEXT);
         saveButton.addActionListener(e -> tryToSave(listViewDialog));
@@ -428,10 +432,19 @@ public class LibraryView implements Runnable {
         });
         buttonsPanel.add(viewButton);
         JButton deleteButton = new JButton("Delete Selected Link");
-        //TODO: add action listener
+        deleteButton.addActionListener(e -> {
+            if(resultJList.getSelectedValue() == null)
+                return;
+            String msg = "Delete Link \""+resultJList.getSelectedValue().getTitle()+"\" from list \""+
+                    resultJList.getSelectedValue().getListName()+"\"?";
+            if(JOptionPane.showConfirmDialog(resultsDialog, msg,"Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                libc.removeLink(resultJList.getSelectedValue().getListName(),
+                        resultJList.getSelectedValue().getIndex());
+            }
+        });
 
         buttonsPanel.add(deleteButton);
-        //TODO: confirm and delete
         JButton cancelButton = new JButton(CANCEL);
         cancelButton.addActionListener(e -> resultsDialog.dispose());
         buttonsPanel.add(cancelButton);
@@ -491,10 +504,13 @@ public class LibraryView implements Runnable {
         buttonPanel.add(okButton);
         JButton deleteButton = new JButton("Delete");
         deleteButton.addActionListener(e -> {
-            libc.removeLink(listName, index);
-            viewLinkDialog.dispose();
-            //TODO: confirm delete
-            runSearch(searchText, searchOption);
+            String msg = "Delete link \""+link.getTitle()+"\" from list \""+listName+"\"?";
+            if(JOptionPane.showConfirmDialog(viewLinkDialog, msg,"Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                libc.removeLink(listName, index);
+                viewLinkDialog.dispose();
+                runSearch(searchText, searchOption);
+            }
         });
         buttonPanel.add(deleteButton);
 
