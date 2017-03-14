@@ -257,7 +257,6 @@ public class LibraryController {
                         break;
                 }
                 secs += Long.parseLong(tmp);
-                System.out.println(secs);
             } else if(s.charAt(i) == 'M') {
                 String tmp = "";
                 while(i > 0) {
