@@ -13,7 +13,6 @@ public class Main {
             System.out.println(e.toString());
             e.printStackTrace();
         }
-
         SwingUtilities.invokeLater(new LibraryView(new LibraryController()));
     }
 
