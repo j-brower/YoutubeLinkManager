@@ -2,9 +2,8 @@ package youtubeLinkManager;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.*;
+import com.google.gson.stream.JsonWriter;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -63,6 +62,9 @@ public class LibraryController {
     public void setAPIKey(String s) {
         lib.setAPIKey(s);
         unsavedChanges = true;
+    }
+    public void removeAPIKey() {
+        lib.setAPIKey("");
     }
     public void setNotifyNew(boolean b) { notifyNew = b; }
     public boolean hasUnsavedChanges() { return unsavedChanges; }
@@ -195,12 +197,16 @@ public class LibraryController {
         if(res == null)
             return new String[] {"Connection error.", "Connection error."};
         try {
-            JSONObject j = new JSONObject(res);
-            String title = j.getJSONArray("items").getJSONObject(0).getJSONObject("snippet").getString("title");
-            String duration = prettyDuration(j.getJSONArray("items")
-                    .getJSONObject(0).getJSONObject("contentDetails").getString("duration"));
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(res);
+            JsonObject j = element.getAsJsonObject();
+            JsonArray items = j.getAsJsonArray("items");
+            JsonObject snippet = items.get(0).getAsJsonObject().getAsJsonObject("snippet");
+            JsonObject contentDetails = items.get(0).getAsJsonObject().getAsJsonObject("contentDetails");
+            String title = snippet.getAsJsonPrimitive("title").getAsString();
+            String duration = prettyDuration(contentDetails.getAsJsonPrimitive("duration").getAsString());
             return new String[]{title, duration};
-        } catch(JSONException jse) {
+        } catch(JsonSyntaxException jse) {
             //possibly unreachable
             jse.printStackTrace();
             return new String[]{"Could not process Google API response.", ""};
@@ -376,19 +382,23 @@ public class LibraryController {
             writer.close();
         } else if(fileType == JSONFILE) {
             fileString = "Exported to \"out.json\"";
-            JSONArray entries = new JSONArray();
+            JsonArray entries = new JsonArray();
             for(Link l: links) {
-                JSONObject obj = new JSONObject();
-                obj.put("url", l.getUrl());
-                obj.put("title", l.getTitle());
-                obj.put("length", l.getLength());
-                entries.put(obj);
+                JsonObject obj = new JsonObject();
+                obj.addProperty("url", l.getUrl());
+                obj.addProperty("title", l.getTitle());
+                obj.addProperty("length", l.getLength());
+                entries.add(obj);
             }
-            JSONObject out = new JSONObject();
-            out.put("items", entries);
-            FileWriter writer = new FileWriter("out.json");
-            out.write(writer, 1, 4);
-            writer.close();
+            JsonObject out = new JsonObject();
+            out.add("items", entries);
+            GsonBuilder gb = new GsonBuilder();
+            gb.setPrettyPrinting();
+            Gson gson = gb.create();
+            FileWriter fw = new FileWriter("out.json");
+            gson.toJson(out, fw);
+            fw.flush();
+            fw.close();
         } else if(fileType == XMLFILE) {
             try {
                 fileString = "Exported to \"out.xml\"";

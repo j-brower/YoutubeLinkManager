@@ -40,6 +40,7 @@ class LibraryControllerTest {
 
     @Test
     void hasAPIKey() {
+        libc.removeAPIKey();
         assertEquals(false, libc.hasAPIKey());
         libc.setAPIKey(apiKey);
         assertEquals(true, libc.hasAPIKey());
@@ -49,6 +50,7 @@ class LibraryControllerTest {
 
     @Test
     void setKey() {
+        libc.removeAPIKey();
         assertEquals("", libc.getAPIKey());
         libc.setAPIKey(apiKey);
         assertEquals(apiKey, libc.getAPIKey());
