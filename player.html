@@ -3,6 +3,115 @@
   <head>
     <meta charset="UTF-8">
     <title>Playlist Player</title>
+    <link rel="stylesheet" type="text/css" href="player.css">
   </head>
-  
+
+  <body>
+    <!---<script type="text/javascript" src="out.json"></script>--->
+    <div class="container">
+      <div class="right">
+        <p>hi</p>
+      </div>
+
+      <div class="left">
+        <p class="fileLabel">Select a .json playlist file:</p>
+        <input id="fileInput" class="fileInput" type=file value="select playlist file">
+        <div class="listdiv">
+        <nav>
+          <ol id="list">
+            <li>No file selected.</li>
+          </ol>
+        </nav>
+        </div>
+        <div class="playbackButtons">
+          <button id="shuffleButton">shuffle</button>
+          <button id="buttonPrev"><</button>
+          <button id="buttonNext">></button>
+        </div>  
+        <p class="help">
+          <a href="javascript:alert('Export playlists as .json from the Youtube Link Manager program, then select the file to play it.');">
+            help?
+          </a>
+        </p>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+      function listItem(index, url, title, length) {
+        this.index  = index;
+        this.url    = url;
+        this.title  = title;
+        this.length = length;
+        this.asLiTag = function() { return '<li><a href="javascript:playItem(' 
+          + this.index + ');">' + title + ' (' + length + ')' + 
+          '</a></li>';
+        }
+      }
+      var listModel = new Array();
+      var position = 0;
+      var fileInput = document.getElementById('fileInput');
+      var shuffleButton = document.getElementById('shuffleButton');
+      var nextButton = document.getElementById('buttonNext');
+      var prevButton = document.getElementById('buttonPrev');
+      var list = document.getElementById('list');
+      
+      nextButton.onclick = function() {
+        position =  position + 1;
+        playItem(position);
+      }
+      prevButton.onclick = function() {
+        position = position - 1;
+        playItem(position);
+      }
+      shuffleButton.onclick = function() {
+        var i = 0
+          , j = 0
+          , temp = null
+
+        for (i = listModel.length - 1; i > 0; i -= 1) {
+          j = Math.floor(Math.random() * (i + 1))
+          temp = listModel[i]
+          listModel[i] = listModel[j]
+          listModel[j] = temp
+        }
+        refreshShuffledList();
+      }
+
+      fileInput.addEventListener('change', function(e) {
+        var file = fileInput.files[0];
+        position = 0;
+        var reader = new FileReader();
+        var text = '';
+        reader.onload = function(e) {
+          text = reader.result;
+          var jsonplaylist = JSON.parse(text);
+          refreshList(jsonplaylist);
+        }
+        reader.readAsText(file);
+      });
+      function refreshShuffledList() {
+        list.innerHTML = '';
+        for(var i = 0; i < listModel.length; i++) {
+          list.innerHTML += listModel[i].asLiTag() + '\n';
+        }
+        position = 0;
+        playItem(position);
+      }
+      //Refresh function for population from new file, allows O(n) initial population.
+      function refreshList(json) {
+        list.innerHTML = '';
+        listModel = new Array();
+        for(var i = 0; i < json.items.length; i++) {
+          listModel[i] = new listItem(i, json.items[i].url, json.items[i].title,
+            json.items[i].length);
+          list.innerHTML += listModel[i].asLiTag() + '\n';
+        }   
+        position = 0;
+        playItem(position);  
+      }
+      function playItem(index) {
+        console.log("playing " + index);
+      }
+    </script>
+  </body>
  </html>
