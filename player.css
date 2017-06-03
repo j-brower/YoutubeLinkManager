@@ -1,0 +1,64 @@
+body {
+  font-family: sans;
+  font-size:   medium;
+  text-align:  left;
+  background:  #222222;
+  color:       #DDDDDD;
+}
+
+nav ol {
+  /*height:     75%;*/
+  width:      auto;
+  margin:     2px;
+  padding:    2px;
+  background: #252525;
+  color:      #DDDDDD;
+  overflow-x: wrap;
+}
+
+a {
+  text-decoration: none;
+}
+a:link {
+  color: #4444FF;
+}
+a:visited {
+  color: #FF44FF;
+}
+p.fileLabel {
+  position: absolute;
+  top: 1%;
+}
+input.fileInput {
+  position: absolute;
+  top: 8%;  
+}
+div.listdiv {
+  position: absolute;
+  top: 14%;
+  left: 1%;
+  right: 70%;
+  bottom: 10%;
+  overflow-y: scroll;
+  overflow-x: wrap;
+}
+div.playbackButtons {
+  position: absolute;
+  height: 5%
+  width: 50%;
+  top: 91%;
+}
+p.help {
+  position: absolute;
+  top: 94%;
+}
+div.right {
+  width: 70%;
+  float: right;
+}
+div.left {
+  width: auto%;
+  left: 4px;
+  overflow: hidden;
+}
+
